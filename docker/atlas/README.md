@@ -56,7 +56,8 @@ On developer machine（I want add/update table for my business）
 On developer machine（I want to update my local database with the changes that others developer have made）
 
 	# cd ./docker/atlas
-	atlas schema apply -u $ATLAS_URL --to file://opencoze_latest_schema.hcl # step 1 for developer on mac, this command will execute in start_debug.sh
+	# Note: Use ATLAS_URL without database scope to allow schema creation/modification
+	atlas schema apply -u $(echo $ATLAS_URL | sed 's|/[^/?]*\([?].*\)\?$|/\1|') --to file://opencoze_latest_schema.hcl # step 1 for developer on mac, this command will execute in start_debug.sh
 
 On Server machine
 

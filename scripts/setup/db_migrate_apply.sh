@@ -41,7 +41,11 @@ fi
 
 cd "$DOCKER_DIR/atlas"
 
-atlas schema apply -u $ATLAS_URL --to file://opencoze_latest_schema.hcl --exclude "atlas_schema_revisions,table_*" --auto-approve
+# Extract database connection URL without database scope for schema operations
+ATLAS_URL_NO_DB=$(echo "$ATLAS_URL" | sed 's|/[^/?]*\([?].*\)\?$|/\1|')
+echo "Using Atlas URL without database scope: $ATLAS_URL_NO_DB"
+
+atlas schema apply -u $ATLAS_URL_NO_DB --to file://opencoze_latest_schema.hcl --exclude "atlas_schema_revisions,table_*" --auto-approve
 echo -e "${GREEN}✅ apply mysql schema successfully${NC}"
 
 # if [ "$OS" = "Darwin" ]; then

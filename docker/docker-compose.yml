@@ -475,9 +475,13 @@ services:
         fi
 
         echo "final atlas url: $${TMP_ATLAS_URL}"
+        # Extract database connection URL without database scope for schema operations
+        TMP_ATLAS_URL_NO_DB=$(echo "$${TMP_ATLAS_URL}" | sed 's|/[^/?]*\([?].*\)\?$|/\1|')
+        echo "atlas url without database scope: $${TMP_ATLAS_URL_NO_DB}"
+        
         for i in `seq 1 60`; do
              if atlas schema apply \
-                 -u "$${TMP_ATLAS_URL}" \
+                 -u "$${TMP_ATLAS_URL_NO_DB}" \
                  --to file:///opencoze_latest_schema.hcl \
                  --exclude "atlas_schema_revisions,table_*" \
                  --auto-approve; then
